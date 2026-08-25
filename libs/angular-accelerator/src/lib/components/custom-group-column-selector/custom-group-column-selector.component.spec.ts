@@ -174,4 +174,47 @@ describe('CustomGroupColumnSelectorComponent', () => {
       expect(positionSpy).toHaveBeenCalledWith('left')
     })
   })
+
+  describe('template', () => {
+    beforeEach(() => {
+      fixture.componentRef.setInput('columns', [
+        { id: 'c1', nameKey: 'c1' },
+        { id: 'c2', nameKey: 'c2' },
+        { id: 'c3', nameKey: 'c3' },
+      ])
+      fixture.componentRef.setInput('displayedColumns', [{ id: 'c1', nameKey: 'c1' }])
+      fixture.componentRef.setInput('frozenActionColumn', false)
+      fixture.componentRef.setInput('actionColumnPosition', 'right')
+      fixture.componentRef.setInput('customGroupKey', 'test-group')
+    })
+
+    it('should have autofocus=false on p-pickList', () => {
+      component.onOpenCustomGroupColumnSelectionDialogClick()
+      fixture.detectChanges()
+
+      const pickList = fixture.nativeElement.querySelector('p-picklist')
+      expect(pickList).toBeTruthy()
+      expect(pickList.getAttribute('autofocus')).toBe('false')
+    })
+
+    it('should have autofocus=false on p-selectbutton (frozenOptions)', () => {
+      component.onOpenCustomGroupColumnSelectionDialogClick()
+      fixture.detectChanges()
+
+      const selectButtons = fixture.nativeElement.querySelectorAll('p-selectbutton')
+      expect(selectButtons.length).toBeGreaterThanOrEqual(2)
+      const frozenSelectButton = selectButtons[0]
+      expect(frozenSelectButton.getAttribute('autofocus')).toBe('false')
+    })
+
+    it('should have autofocus=false on p-selectbutton (alignmentOptions)', () => {
+      component.onOpenCustomGroupColumnSelectionDialogClick()
+      fixture.detectChanges()
+
+      const selectButtons = fixture.nativeElement.querySelectorAll('p-selectbutton')
+      expect(selectButtons.length).toBeGreaterThanOrEqual(2)
+      const alignmentSelectButton = selectButtons[1]
+      expect(alignmentSelectButton.getAttribute('autofocus')).toBe('false')
+    })
+  })
 })
