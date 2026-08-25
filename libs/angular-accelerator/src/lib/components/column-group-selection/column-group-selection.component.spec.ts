@@ -32,7 +32,7 @@ describe('ColumnGroupSelectionComponent', () => {
   })
 
   describe('template', () => {
-    it('should have autofocus attribute set to false on p-select element', () => {
+    it('should not have autofocus attribute on p-select element when using property binding [autofocus]="false"', () => {
       fixture.componentRef.setInput('columns', [makeColumn({ predefinedGroupKeys: ['g1'] })])
       fixture.componentRef.setInput('defaultGroupKey', 'def')
       fixture.componentRef.setInput('customGroupKey', 'custom')
@@ -40,7 +40,8 @@ describe('ColumnGroupSelectionComponent', () => {
 
       const pSelect = fixture.nativeElement.querySelector('p-select')
       expect(pSelect).toBeTruthy()
-      expect(pSelect.getAttribute('autofocus')).toBe('false')
+      // PrimeNG AutoFocus directive removes the autofocus attribute when bound to false
+      expect(pSelect.getAttribute('autofocus')).toBeNull()
     })
   })
 
