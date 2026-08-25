@@ -1,7 +1,13 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { DataLayoutSelectionComponent } from './data-layout-selection.component'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
+import { SelectButtonModule } from 'primeng/selectbutton'
 import { TranslateModule } from '@ngx-translate/core'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
+import { DataLayoutSelectionComponent } from './data-layout-selection.component'
 import { DataViewStateService } from '../../services/data-view-state.service'
+import { OcxTooltipDirective } from '../../directives/tooltip.directive'
 
 describe('DataLayoutSelectionComponent', () => {
   let component: DataLayoutSelectionComponent
@@ -11,9 +17,9 @@ describe('DataLayoutSelectionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DataLayoutSelectionComponent],
-      imports: [TranslateModule.forRoot()],
-      providers: [DataViewStateService],
-      schemas: [],
+      imports: [CommonModule, FormsModule, SelectButtonModule, TranslateModule.forRoot(), OcxTooltipDirective],
+      providers: [provideTranslateTestingService({}), DataViewStateService],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
 
     fixture = TestBed.createComponent(DataLayoutSelectionComponent)
@@ -77,6 +83,18 @@ describe('DataLayoutSelectionComponent', () => {
       component.onDataViewLayoutChange({ icon: 'x' as any, layout: 'grid' })
 
       expect(stateService.layout()).toBe('grid')
+    })
+  })
+
+  describe('template', () => {
+    it('should have autofocus=false attribute on p-selectbutton element', () => {
+      fixture.componentRef.setInput('supportedViewLayouts', ['grid', 'list', 'table'])
+      fixture.detectChanges()
+
+      const pSelectButton = fixture.nativeElement.querySelector('p-selectbutton')
+      expect(pSelectButton).toBeTruthy()
+      expect(pSelectButton.hasAttribute('autofocus')).toBe(true)
+      expect(pSelectButton.getAttribute('autofocus')).toBe('false')
     })
   })
 })
